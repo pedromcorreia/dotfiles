@@ -1,4 +1,4 @@
-# dotfiles
+# Dotfiles
 This document will help to kwon my dotfiles
 
 Plugins for vim
