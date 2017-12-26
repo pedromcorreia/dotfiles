@@ -61,14 +61,14 @@ filetype plugin indent on    " required
   set shiftwidth=2
   set showtabline=2
 
-  set visualbell        " Use visual bell (no beeping)
-
   set autoindent " Always  set auto indenting on
   set smartindent
   set smarttab
   set ruler " show the cursor position all the time
   set number    " Show line numbers
   set selectmode=mouse " select when using the mouse
+
+  "set visualbell        " Use visual bell (no beeping)
 
   set nobackup " do not keep a backup files 
   set nowritebackup " do not keep a backup files 
