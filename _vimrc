@@ -61,7 +61,7 @@ filetype plugin indent on    " required
   set shiftwidth=2
   set showtabline=2
 
-  set visualbell        # Use visual bell (no beeping)
+  set visualbell        " Use visual bell (no beeping)
 
   set autoindent " Always  set auto indenting on
   set smartindent
