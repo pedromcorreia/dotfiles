@@ -78,3 +78,6 @@ filetype plugin indent on    " required
   set smartcase " Enable smart-case search
   set ignorecase " Always case-insensitive
   set incsearch    " Searches for strings incrementally
+
+  set list
+  set listchars=trail:* " set whitespace * to end of line
