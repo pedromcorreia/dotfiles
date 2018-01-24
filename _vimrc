@@ -37,6 +37,8 @@ Plugin 'ntpeters/vim-better-whitespace'
 
 Plugin 'mattn/emmet-vim'
 
+Plugin 'posva/vim-vue'
+
 Plugin 'scrooloose/nerdtree'
 " All of your Plugins must be added before the following line
 call vundle#end()            " required
@@ -84,5 +86,8 @@ filetype plugin indent on    " required
 
   " abbreviations
   cab W w
-  cab vs vsplit
-  cab st split
+  cab Q q
+  cab W! w!
+  cab Q! q!
+  cab v vsplit
+  cab s split
