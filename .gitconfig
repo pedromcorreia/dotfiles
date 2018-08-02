@@ -1,16 +1,21 @@
 [user]
-	name = pedmcor
-	email = pedmcor@gmail.com
+  name = pedmcor
+  email = pedmcor@gmail.com
 [alias]
-	co = checkout
-	ci = commit
-	st = status
-	br = branch
-	hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
-	type = cat-file -t
-	dump = cat-file -p
-	push = ps
-	cob = checkout -b
-	pull = pl
+  co = checkout
+  ci = commit
+  st = status
+  sb = status -sb
+  br = branch
+  hist = log --pretty=format:'%h %ad | %s%d [%an]' --graph --date=short
+  type = cat-file -t
+  dump = cat-file -p
+  push = ps
+  cob = checkout -b
+  pull = pl
+  lg = log --all --graph --decorate --oneline --abbrev-commit
+  branches = branch -a
+  remotes = remote -v
+
 [core]
-	editor = vim
+  editor = vim
