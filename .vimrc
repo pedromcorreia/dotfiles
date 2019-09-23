@@ -1,4 +1,4 @@
-" vim-bootstrap 
+" vim-bootstrap
 
 "*****************************************************************************
 "" Vim-PLug core
@@ -30,14 +30,14 @@ call plug#begin(expand('~/.vim/plugged'))
 Plug 'scrooloose/nerdtree'
 Plug 'tpope/vim-commentary'
 Plug 'vim-airline/vim-airline'
-Plug 'airblade/vim-gitgutter'
 Plug 'Raimondi/delimitMate'
 Plug 'w0rp/ale'
 Plug 'Yggdroot/indentLine'
 Plug 'avelino/vim-bootstrap-updater'
 Plug 'sheerun/vim-polyglot'
-Plug 'ntpeters/vim-better-whitespace'
-Plug 'avdgaag/vim-phoenix'
+Plug 'slashmili/alchemist.vim'
+Plug 'ervandew/supertab'
+Plug 'skalnik/vim-vroom'
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -70,6 +70,9 @@ Plug 'tomasr/molokai'
 Plug 'elixir-lang/vim-elixir'
 Plug 'carlosgaldino/elixir-snippets'
 
+let g:alchemist_tag_map = '<C-]>'
+let g:alchemist_tag_stack_map = '<C-[>'
+
 " erlang
 Plug 'jimenezrick/vimerl'
 
@@ -80,6 +83,41 @@ Plug 'gorodinskiy/vim-coloresque'
 Plug 'tpope/vim-haml'
 Plug 'mattn/emmet-vim'
 
+" ruby
+Plug 'tpope/vim-rails'
+Plug 'tpope/vim-rake'
+Plug 'tpope/vim-projectionist'
+Plug 'thoughtbot/vim-rspec'
+Plug 'ecomba/vim-ruby-refactoring'
+
+" ruby
+let g:rubycomplete_buffer_loading = 1
+let g:rubycomplete_classes_in_global = 1
+let g:rubycomplete_rails = 1
+
+augroup vimrc-ruby
+  autocmd!
+  autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
+  autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
+augroup END
+
+let g:tagbar_type_ruby = {
+    \ 'kinds' : [
+        \ 'm:modules',
+        \ 'c:classes',
+        \ 'd:describes',
+        \ 'C:contexts',
+        \ 'f:methods',
+        \ 'F:singleton methods'
+    \ ]
+\ }
+
+" For ruby refactory
+if has('nvim')
+  runtime! macros/matchit.vim
+else
+  packadd! matchit
+endif
 
 " javascript
 "" Javascript Bundle
@@ -108,6 +146,7 @@ set encoding=utf-8
 set fileencoding=utf-8
 set fileencodings=utf-8
 set ttyfast
+set relativenumber
 
 "" Fix backspace indent
 set backspace=indent,eol,start
@@ -117,6 +156,7 @@ set tabstop=4
 set softtabstop=0
 set shiftwidth=4
 set expandtab
+set lazyredraw
 
 "" Map leader to ,
 let mapleader=','
@@ -254,28 +294,65 @@ cnoreabbrev WQ wq
 cnoreabbrev W w
 cnoreabbrev Q q
 cnoreabbrev Qall qall
-cab v vsplit
-cab V vsplit
-cab s split
-cab S split
-cab f %s
-cab n NERDTree
-cab N NERDTree
-cab Nf NERDTreeFind
-cab NF NERDTreeFind
-cab nF NERDTreeFind
+cnoreabbrev v vsplit
+cnoreabbrev V vsplit
+cnoreabbrev s split
+cnoreabbrev S split
+cnoreabbrev n NERDTreeToggle
+cnoreabbrev N NERDTreeToggle
+cnoreabbrev nf NERDTreeFind
+cnoreabbrev Nf NERDTreeFind
+cnoreabbrev NF NERDTreeFind
+cnoreabbrev nF NERDTreeFind
+cnoreabbrev fzf FZF
+cnoreabbrev fa FZF apps/
+cnoreabbrev Fa FZF apps/
+cnoreabbrev FA FZF apps/
+cnoreabbrev fA FZF apps/
+cnoreabbrev ff FZF ./
+cnoreabbrev f Ag
+
+set mousehide           " Hide mouse pointer on insert mode."
 
 "" NERDTree configuration
 let g:NERDTreeChDirMode=2
-let g:NERDTreeIgnore=['\.rbc$', '\~$', '\.pyc$', '\.db$', '\.sqlite$', '__pycache__']
-let g:NERDTreeSortOrder=['^__\.py$', '\/$', '*', '\.swp$', '\.bak$', '\~$']
 let g:NERDTreeShowBookmarks=1
 let g:nerdtree_tabs_focus_on_files=1
 let g:NERDTreeMapOpenInTabSilent = '<RightMouse>'
 let g:NERDTreeWinSize = 30
 set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.pyc,*.db,*.sqlite
-nnoremap <silent> <F2> :NERDTreeFind<CR>
-nnoremap <silent> <F3> :NERDTreeToggle<CR>
+map <C-n> :NERDTreeToggle<CR>
+
+" NERDTree
+autocmd StdinReadPre * let s:std_in=1
+let g:NERDTreeShowHidden=1
+autocmd User Startified setlocal buftype=
+
+" let g:NERDTreeHighlightCursorline = 0
+" let g:NERDTreeLimitedSyntax = 1
+let g:NERDTreeSyntaxDisableDefaultExtensions = 0
+let g:NERDTreeDisableExactMatchHighlight = 0
+let g:NERDTreeDisablePatternMatchHighlight = 0
+let g:NERDTreeFileExtensionHighlightFullName = 1
+let g:NERDTreeExactMatchHighlightFullName = 1
+let g:NERDTreePatternMatchHighlightFullName = 1
+
+" NERDTress File highlighting
+function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
+ exec 'autocmd filetype nerdtree highlight ' . a:extension .' ctermbg='. a:bg .' ctermfg='. a:fg .' guibg='. a:guibg .' guifg='. a:guifg
+ exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
+endfunction
+
+call NERDTreeHighlightFile('ex', 'blue', 'none', 'blue', '#151515')
+call NERDTreeHighlightFile('eex', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('exs', 'blue', 'none', '#3366FF', '#151515')
+call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('config', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('conf', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('json', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('html', 'yellow', 'none', 'yellow', '#151515')
+call NERDTreeHighlightFile('css', 'cyan', 'none', 'cyan', '#151515')
+call NERDTreeHighlightFile('js', 'Red', 'none', '#ffa500', '#151515')
 
 " grep.vim
 nnoremap <silent> <leader>f :Rgrep<CR>
@@ -332,40 +409,6 @@ set autoread
 "" Mappings
 "*****************************************************************************
 
-"" Split
-noremap <Leader>h :<C-u>split<CR>
-noremap <Leader>v :<C-u>vsplit<CR>
-
-"" Git
-noremap <Leader>ga :Gwrite<CR>
-noremap <Leader>gc :Gcommit<CR>
-noremap <Leader>gsh :Gpush<CR>
-noremap <Leader>gll :Gpull<CR>
-noremap <Leader>gs :Gstatus<CR>
-noremap <Leader>gb :Gblame<CR>
-noremap <Leader>gd :Gvdiff<CR>
-noremap <Leader>gr :Gremove<CR>
-
-" session management
-nnoremap <leader>so :OpenSession<Space>
-nnoremap <leader>ss :SaveSession<Space>
-nnoremap <leader>sd :DeleteSession<CR>
-nnoremap <leader>sc :CloseSession<CR>
-
-"" Tabs
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <silent> <S-t> :tabnew<CR>
-
-"" Set working directory
-nnoremap <leader>. :lcd %:p:h<CR>
-
-"" Opens an edit command with the path of the currently edited file filled in
-noremap <Leader>e :e <C-R>=expand("%:p:h") . "/" <CR>
-
-"" Opens a tab edit command with the path of the currently edited file filled
-noremap <Leader>te :tabe <C-R>=expand("%:p:h") . "/" <CR>
-
 "Clean whitespace at the end of the lines
 nnoremap <silent> <Leader><space> :StripWhitespace<CR>
 
@@ -376,12 +419,7 @@ nnoremap <C-j> i<CR><Esc>
 set wildmode=list:longest,list:full
 set wildignore+=*.o,*.obj,.git,*.rbc,*.pyc,__pycache__
 let $FZF_DEFAULT_COMMAND =  "find * -path '*/\.*' -prune -o -path 'node_modules/**' -prune -o -path 'target/**' -prune -o -path 'dist/**' -prune -o  -type f -print -o -type l -print 2> /dev/null"
-
-" The Silver Searcher
-if executable('ag')
-  let $FZF_DEFAULT_COMMAND = 'ag --hidden --ignore .git -g ""'
-  set grepprg=ag\ --nogroup\ --nocolor
-endif
+nnoremap <expr> <C-p> (len(system('git rev-parse')) ? ':Files' : ':GFiles --exclude-standard --others --cached')."\<cr>"
 
 " ripgrep
 if executable('rg')
@@ -402,8 +440,33 @@ let g:UltiSnipsJumpForwardTrigger="<tab>"
 let g:UltiSnipsJumpBackwardTrigger="<c-b>"
 let g:UltiSnipsEditSplit="vertical"
 
-" ale
+" use nice symbols for errors and warnings
+let g:ale_change_sign_column_color = 1
+let g:ale_sign_error = '✘'
+let g:ale_sign_warning = '⚠'
+highlight ALEErrorSign ctermbg=NONE ctermfg=red
+highlight ALEWarningSign ctermbg=NONE ctermfg=yellow
+
 let g:ale_linters = {}
+let g:ale_linters['javascript'] = ['eslint']
+let g:ale_linters['css'] = ['stylelint']
+let g:ale_linters['elixir'] = ['credo', 'dialyxir', 'dogma', 'elixir-ls', 'mix']
+let g:ale_linters['ruby'] = ['rubocop']
+
+let g:ale_fixers = {}
+let g:ale_fixers['*'] = ['remove_trailing_lines', 'trim_whitespace']
+let g:ale_fixers['css'] = ['prettier']
+let g:ale_fixers['html'] = ['prettier']
+let g:ale_fixers['elixir'] = ['mix_format']
+let g:ale_fixers['ruby'] = ['rufo']
+
+let g:ale_elixir_elixir_ls_release = '/Users/jake/repositories/language_servers/elixir-ls/rel'
+
+let g:ale_fix_on_save = 1
+let g:ale_completion_enabled = 1
+
+let g:ale_sign_error = '>>'
+let g:ale_sign_warning = '--'
 
 " Disable visualbell
 set noerrorbells visualbell t_vb=
@@ -419,6 +482,7 @@ endif
 noremap YY "+y<CR>
 noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
+inoremap jj <esc>
 
 if has('macunix')
   " pbcopy for OSX copy/paste
@@ -538,4 +602,3 @@ else
   let g:airline_symbols.readonly = ''
   let g:airline_symbols.linenr = ''
 endif
-
