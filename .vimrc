@@ -38,6 +38,7 @@ Plug 'sheerun/vim-polyglot'
 Plug 'slashmili/alchemist.vim'
 Plug 'ervandew/supertab'
 Plug 'skalnik/vim-vroom'
+Plug 'airblad/vim-gitgutter'
 
 if isdirectory('/usr/local/opt/fzf')
   Plug '/usr/local/opt/fzf' | Plug 'junegunn/fzf.vim'
@@ -81,7 +82,7 @@ Plug 'jimenezrick/vimerl'
 Plug 'hail2u/vim-css3-syntax'
 Plug 'gorodinskiy/vim-coloresque'
 Plug 'tpope/vim-haml'
-Plug 'mattn/emmet-vim'
+"Plug 'mattn/emmet-vim'
 
 " ruby
 Plug 'tpope/vim-rails'
@@ -89,6 +90,8 @@ Plug 'tpope/vim-rake'
 Plug 'tpope/vim-projectionist'
 Plug 'thoughtbot/vim-rspec'
 Plug 'ecomba/vim-ruby-refactoring'
+Plug 'ngmy/vim-rubocop'
+Plug 'vim-syntastic/syntastic'
 
 " ruby
 let g:rubycomplete_buffer_loading = 1
@@ -100,6 +103,9 @@ augroup vimrc-ruby
   autocmd BufNewFile,BufRead *.rb,*.rbw,*.gemspec setlocal filetype=ruby
   autocmd FileType ruby set tabstop=2|set shiftwidth=2|set expandtab softtabstop=2
 augroup END
+
+" Enable rufo (RUby FOrmat)
+let g:rufo_auto_formatting = 1
 
 let g:tagbar_type_ruby = {
     \ 'kinds' : [
@@ -311,6 +317,8 @@ cnoreabbrev FA FZF apps/
 cnoreabbrev fA FZF apps/
 cnoreabbrev ff FZF ./
 cnoreabbrev f Ag
+cnoreabbrev f Ag
+cnoreabbrev rr redraw
 
 set mousehide           " Hide mouse pointer on insert mode."
 
@@ -325,8 +333,9 @@ map <C-n> :NERDTreeToggle<CR>
 
 " NERDTree
 autocmd StdinReadPre * let s:std_in=1
-let g:NERDTreeShowHidden=1
 autocmd User Startified setlocal buftype=
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
 
 " let g:NERDTreeHighlightCursorline = 0
 " let g:NERDTreeLimitedSyntax = 1
@@ -458,7 +467,7 @@ let g:ale_fixers['*'] = ['remove_trailing_lines', 'trim_whitespace']
 let g:ale_fixers['css'] = ['prettier']
 let g:ale_fixers['html'] = ['prettier']
 let g:ale_fixers['elixir'] = ['mix_format']
-let g:ale_fixers['ruby'] = ['rufo']
+"let g:ale_fixers['ruby'] = ['rufo']
 
 let g:ale_elixir_elixir_ls_release = '/Users/jake/repositories/language_servers/elixir-ls/rel'
 
@@ -467,6 +476,10 @@ let g:ale_completion_enabled = 1
 
 let g:ale_sign_error = '>>'
 let g:ale_sign_warning = '--'
+
+" Rufo
+let g:rufo_auto_formatting = 1
+let g:rufo_errors_buffer_position = 'top'
 
 " Disable visualbell
 set noerrorbells visualbell t_vb=
@@ -480,6 +493,7 @@ if has('unnamedplus')
 endif
 
 noremap YY "+y<CR>
+noremap YC "*yy
 noremap <leader>p "+gP<CR>
 noremap XX "+x<CR>
 inoremap jj <esc>
