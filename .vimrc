@@ -60,9 +60,6 @@ Plug 'xolox/vim-session'
 Plug 'SirVer/ultisnips'
 Plug 'honza/vim-snippets'
 
-"" Color
-Plug 'tomasr/molokai'
-
 "*****************************************************************************
 "" Custom bundles
 "*****************************************************************************
@@ -70,6 +67,7 @@ Plug 'tomasr/molokai'
 " elixir
 Plug 'elixir-lang/vim-elixir'
 Plug 'carlosgaldino/elixir-snippets'
+Plug 'slashmili/alchemist.vim'
 
 let g:alchemist_tag_map = '<C-]>'
 let g:alchemist_tag_stack_map = '<C-[>'
@@ -139,6 +137,7 @@ if filereadable(expand("~/.vimrc.local.bundles"))
 endif
 
 call plug#end()
+
 
 " Required:
 filetype plugin indent on
@@ -214,8 +213,6 @@ set ruler
 set number
 
 let no_buffers_menu=1
-silent! colorscheme molokai
-
 set mousemodel=popup
 set t_Co=256
 set guioptions=egmrti
@@ -234,21 +231,13 @@ else
   let g:indentLine_concealcursor = 0
   let g:indentLine_char = '|'
   let g:indentLine_faster = 1
-
-  if $COLORTERM == 'gnome-terminal'
-    set term=gnome-256color
-  else
-    if $TERM == 'xterm'
-      set term=xterm-256color
-    endif
-  endif
 endif
 
+"colorscheme monokai
+set termguicolors
+let macvim_skip_colorscheme = 1
 
-if &term =~ '256color'
-  set t_ut=
-endif
-
+colorscheme elflord
 
 "" Disable the blinking cursor.
 set gcr=a:blinkon0
@@ -352,7 +341,7 @@ function! NERDTreeHighlightFile(extension, fg, bg, guifg, guibg)
  exec 'autocmd filetype nerdtree syn match ' . a:extension .' #^\s\+.*'. a:extension .'$#'
 endfunction
 
-call NERDTreeHighlightFile('ex', 'blue', 'none', 'blue', '#151515')
+call NERDTreeHighlightFile('ex', 'yellow', 'none', 'yellow', '#151515')
 call NERDTreeHighlightFile('eex', 'yellow', 'none', 'yellow', '#151515')
 call NERDTreeHighlightFile('exs', 'blue', 'none', '#3366FF', '#151515')
 call NERDTreeHighlightFile('yml', 'yellow', 'none', 'yellow', '#151515')
